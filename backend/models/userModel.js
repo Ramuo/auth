@@ -1,3 +1,4 @@
+import crypto from "crypto";
 import mongoose from 'mongoose';
 import bcrypt from 'bcryptjs';
 
@@ -6,7 +7,6 @@ const userSchema = new mongoose.Schema({
         name: {
             type: String,
             required: true,
-            unique: true,
         },
         email: {
             type: String,
@@ -59,6 +59,23 @@ userSchema.pre('save', async function(next){
     const salt = await bcrypt.genSalt(10);
     this.password = await bcrypt.hash(this.password, salt);
 });
+
+//Generate and hash password Token
+userSchema.methods.getResetTokenPassword = function (){
+    //Generate Token
+    const resetToken = crypto.randomBytes(20).toString('hex');
+  
+    //Hash token and set it to resetPasswordToken field
+    this.resetPasswordToken = crypto
+      .createHash('sha256')
+      .update(resetToken)
+      .digest('hex')
+    
+    //Set token expiry
+    this.resetPasswordExpire = Date.now() + 30 * 60 * 1000; // 10mn
+  
+    return resetToken;
+};
 
 const User = mongoose.model('User', userSchema);
 export default User;

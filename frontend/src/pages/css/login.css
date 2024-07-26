@@ -108,4 +108,5 @@ button {
 
 .social div button {
   border-radius: 2rem !important;
+  width: 100%;
 }

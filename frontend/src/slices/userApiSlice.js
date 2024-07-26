@@ -20,6 +20,20 @@ const userApiSlice = apiSlice.injectEndpoints({
                 body: data
             }),
         }),
+        google: builder.mutation({
+            query: (data) => ({
+                url: `${USERS_URL}/google`,
+                method: 'POST',
+                body: data
+            }), 
+        }),
+        facebook: builder.mutation({
+            query: (data) => ({
+                url: `${USERS_URL}/facebook`,
+                method: 'POST',
+                body: data
+            }), 
+        }),
         logout: builder.mutation({
             query: () => ({
                 url: `${USERS_URL}/logout`,
@@ -38,6 +52,21 @@ const userApiSlice = apiSlice.injectEndpoints({
             }),
             keepUnusedDataFor: 5,
         }),
+        forgotpassword: builder.mutation({
+            query: (data) => ({
+                url: `${USERS_URL}/forgot-password`,
+                method: 'POST',
+                body: data
+            }),
+        }),
+        resetpassword: builder.mutation({
+            query: (data) => ({
+                url: `${USERS_URL}/reset-password/${data.token}`,
+                method: 'PUT',
+                body: data
+            }),
+            invalidatesTags: ['User'],
+        }),
     }),
 });
 
@@ -48,4 +77,8 @@ export const {
     useLogoutMutation,
     useVerifyEmailQuery,
     useResendVerifyEmailQuery,
+    useGoogleMutation,
+    useFacebookMutation,
+    useForgotpasswordMutation,
+    useResetpasswordMutation
 }= userApiSlice;
